@@ -15,15 +15,26 @@ def load_and_engineer_features(AAPL_data):
 
     df["Return"] = df["Close"].pct_change()
 
-    df["MA10"] = df["Close"].rolling(window=10).mean()
-    df["MA20"] = df["Close"].rolling(window=20).mean()
+    df["SMA10"] = df["Close"].rolling(window=10).mean()
+    # df["MA20"] = df["Close"].rolling(window=20).mean()
 
     df["Volatility"] = df["Return"].rolling(window=10).std()
 
     df["High_Low_spread"] = df["High"] - df["Low"]
     df["Close_Open_change"] = df["Close"] - df["Open"]
 
-    df["Target"] = (df["Close"].shift(-1) > df["Close"]).astype(int)
+
+    df["Return_1d"] = df["Close"].pct_change(1)
+    
+
+    df["EMA_10"] = df["Close"].ewm(span=10, adjust=False).mean()
+    # df["EMA_26"] = df["Close"].ewm(span=26, adjust=False).mean()
+
+    
+
+    df["Volume_Change"] = df["Volume"].pct_change
+
+    df["Target"] = (df["Close"].shift(-3) > df["Close"]).astype(int)
 
     df.dropna(inplace=True)
 
@@ -35,3 +46,4 @@ if __name__ == "__main__":
     csv_file = os.path.join("data", "AAPL_data.csv")
     processed_df = load_and_engineer_features(csv_file)
     print(processed_df.head())
+    
