@@ -21,6 +21,8 @@ def train_model(TSLA_data):
         X, y, test_size=0.2, stratify=y
     )
 
+   
+
     # model = RandomForestClassifier((n_estimators=100, random_state=42, class_weight="balanced")
     # model.fit(X_train, y_train)
     model = XGBClassifier(
@@ -31,9 +33,15 @@ def train_model(TSLA_data):
         colsample_bytree = 0.8,
         random_state = 42,
         eval_metric = "logloss",
-        scale_pos_weight = 18/31
+        scale_pos_weight = 18/31,
     )
+
+   
+
     model.fit(X_train, y_train)
+
+ 
+
     
 
     y_pred = model.predict(X_test)
