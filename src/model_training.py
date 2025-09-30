@@ -8,9 +8,9 @@ from src.preprocessing import load_and_engineer_features
 
 from xgboost import XGBClassifier
 
-def train_model(AAPL_data):
+def train_model(TSLA_data):
 
-    df = load_and_engineer_features(AAPL_data)
+    df = load_and_engineer_features(TSLA_data)
 
     X = df.drop(columns=["Target"])
     y = df["Target"]
@@ -18,7 +18,7 @@ def train_model(AAPL_data):
     X = X.select_dtypes(include=["float64", "int64"])
 
     X_train, X_test, y_train, y_test = train_test_split(
-        X, y, test_size=0.2, shuffle=False
+        X, y, test_size=0.2, stratify=y
     )
 
     # model = RandomForestClassifier((n_estimators=100, random_state=42, class_weight="balanced")
@@ -30,7 +30,8 @@ def train_model(AAPL_data):
         subsample = 0.8,
         colsample_bytree = 0.8,
         random_state = 42,
-        eval_metric = "logloss"
+        eval_metric = "logloss",
+        scale_pos_weight = 18/31
     )
     model.fit(X_train, y_train)
     
@@ -54,6 +55,6 @@ def train_model(AAPL_data):
 
 if __name__ == "__main__":
 
-    csv_file = os.path.join("data", "AAPL_data.csv")
+    csv_file = os.path.join("data", "TSLA_data.csv")
     model, acc = train_model(csv_file)
 
