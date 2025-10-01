@@ -61,6 +61,9 @@ def train_model(TSLA_data):
 
     print(model.feature_importances_)
 
+    import joblib
+    joblib.dump(model, "Stock_predictor.pkl")
+
     return model, accuracy, X_test, y_test, y_pred
 
 if __name__ == "__main__":

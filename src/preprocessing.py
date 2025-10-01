@@ -1,17 +1,17 @@
 import pandas as pd
 import os
 
-def load_and_engineer_features(TSLA_data):
+def load_and_engineer_features(df):
 
-    df = pd.read_csv(TSLA_data)
+    # df = pd.read_csv(TSLA_data)
 
     for col in ["Open", "High", "Low", "Close"]:
         df[col] = pd.to_numeric(df[col], errors="coerce")
 
     df.dropna(inplace=True)
-    if "Date" in df.columns:
-        df["Date"] = pd.to_datetime(df["Date"])
-        df.set_index("Date", inplace=True)
+    # if "Date" in df.columns:
+    #     df["Date"] = pd.to_datetime(df["Date"])
+    #     df.set_index("Date", inplace=True)
 
     df["Return"] = df["Close"].pct_change()
 
@@ -33,9 +33,9 @@ def load_and_engineer_features(TSLA_data):
 
     
 
-    df["Volume_Change"] = df["Volume"].pct_change
+    df["Volume_Change"] = df["Volume"].pct_change()
 
-    df["Target"] = (df["Close"].shift(-3) > df["Close"]).astype(int)
+    df["Target"] = (df["Close"].shift(-1) > df["Close"]).astype(int)
 
     df.dropna(inplace=True)
 
