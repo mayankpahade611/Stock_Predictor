@@ -10,6 +10,11 @@ def fetch_latest_data(symbol):
     start_date = end_date - timedelta(days=60)
 
     df = yf.download(symbol, start=start_date, end=end_date)
+    
+    # flatten multiindex and remove ticker suffix
+    df.columns = [col[0] if isinstance(col, tuple)else col for col in df.columns]
+    df.columns = [col.split()[0].strip() for col in df.columns]
+
     if df.empty:
         raise ValueError(f"No data fetched for symbol {symbol}")
     
@@ -19,7 +24,7 @@ def prepare_features(df):
 
     return load_and_engineer_features(df)
 
-def predict_tomorrow(symbol = "TSLA"):
+def predict_tomorrow(symbol = "AAPL"):
 
     # Load the trained model
     model = joblib.load("Stock_predictor.pkl")
@@ -33,20 +38,25 @@ def predict_tomorrow(symbol = "TSLA"):
     # Latest row of features
     latest_features = processed_df.iloc[-1:].drop(columns=["Date", "Target"], errors="ignore")
 
+    latest_features.columns = [col.split()[0].strip() for col in latest_features.columns]
+
+    latest_features = latest_features.reindex(model.feature_names_in_, axis = 1, fill_value = 0)
+
     # Make predictions
     prediction = model.predict(latest_features)[0]
-    prob = model.predict_prob(latest_features)[0] if hasattr(model, "predict_prob")else None
+    proba = model.predict_proba(latest_features)[0] if hasattr(model, "predict_prob")else None
 
     # Interpret result
     movement = "UP" if prediction == 1 else "DOWN"
     print(f"Predicted price movement for {symbol} tomorrow: {movement}")
+   
 
 
-    if prob is not None:
-        print(f"Prediction confidence: {prob[prediction]: 2f}")
+    if proba is not None:
+        print(f"Prediction confidence: {proba[prediction]: 2f}")
 
 if __name__ == "__main__":
-    predict_tomorrow("TSLA")
+    predict_tomorrow("AAPL")
 
 
     

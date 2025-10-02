@@ -4,9 +4,20 @@ import os
 def load_and_engineer_features(df):
 
     # df = pd.read_csv(TSLA_data)
+    df = df.reset_index()
 
-    for col in ["Open", "High", "Low", "Close"]:
-        df[col] = pd.to_numeric(df[col], errors="coerce")
+    expected_cols = ["Open", "High", "Low", "Close", "Volume"]
+    for col in expected_cols:
+        if col not in df.columns:
+            raise ValueError(f"Column '{col}' nor found in the data. Available columns: {df.columns.tolist()}")
+        
+
+    numeric_col = [col for col in df.columns if col not in ["Date"]]
+    for col in numeric_col:
+        df[col] = pd.to_numeric(df[col], errors='coerce')
+
+    # for col in ["Open", "High", "Low", "Close"]:
+    #     df[col] = pd.to_numeric(df[col], errors="coerce")
 
     df.dropna(inplace=True)
     # if "Date" in df.columns:
