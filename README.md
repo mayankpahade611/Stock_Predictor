@@ -12,19 +12,6 @@ Includes a **Streamlit UI**, feature engineering, and a saved model (`stock_pred
 - Interactive Streamlit interface  
 - Price chart visualization  
 
----
-
-## Project Structure
-
-Stock_Predictor/
-├── src/
-│ ├── app.py
-│ ├── predict.py
-│ ├── preprocessing.py
-│ ├── model_training.py
-├── stock_predictor.pkl
-├── requirements.txt
-└── README.md
 
 
 ---
