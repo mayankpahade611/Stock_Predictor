@@ -11,9 +11,13 @@ def fetch_latest_data(symbol):
 
     df = yf.download(symbol, start=start_date, end=end_date)
     
+    if isinstance(df.columns, pd.MultiIndex):
+        df.columns = [col[0] if isinstance(col, tuple) else col for col in df.columns]
+        
     # flatten multiindex and remove ticker suffix
-    df.columns = [col[0] if isinstance(col, tuple)else col for col in df.columns]
-    df.columns = [col.split()[0].strip() for col in df.columns]
+    # df.columns = [col[0] if isinstance(col, tuple)else col for col in df.columns]
+    df.columns = df.columns.astype(str).str.strip()
+    # df.columns = [col.split()[0].strip() for col in df.columns]
 
     if df.empty:
         raise ValueError(f"No data fetched for symbol {symbol}")
@@ -34,7 +38,10 @@ def predict_tomorrow(symbol = "AAPL"):
 
     # Apply feature engineering
     processed_df = prepare_features(raw_df)
+    if isinstance(processed_df.columns, pd.MultiIndex):
+        processed_df.columns = [col[0] if isinstance(col, tuple) else col for col in processed_df.columns]
 
+    processed_df.columns = processed_df.columns.astype(str).str.strip()
     # Latest row of features
     latest_features = processed_df.iloc[-1:].drop(columns=["Date", "Target"], errors="ignore")
 
