@@ -22,6 +22,10 @@ if st.button("Predict"):
             st.error(f"Failed to fetch data for {symbol}. Try another symbol.")
 
         else:
+            if isinstance(df.columns, pd.MultiIndex):
+                df.columns = ['_'.join(col).strip() if isinstance(col, tuple) else col for col in df.columns]
+            df.columns = [col.split('_')[0] for col in df.columns]
+
             df = df.reset_index()
 
             processed_df = load_and_engineer_features(df)
@@ -65,10 +69,19 @@ if st.button("Predict"):
 
             st.subheader(f"Last {days} Days Closing Prices")
             fig, ax = plt.subplots()
-            ax.plot(df["Date"], df["Close"])
+            ax.plot(df["Date"], df["Close"], linewidth=2)
+
+            ax.grid(alpha = 0.3)
+
+            last_date = df["Date"].iloc[-1]
+            last_price = df["Close"].iloc[-1]
+            ax.scatter(last_date, last_price, s=80, edgecolors="black")
+
             ax.set_xlabel("Date")
             ax.set_ylabel("Close Price")
-            ax.title(f"{symbol} Price Trend")
+            ax.set_title(f"{symbol} Price Trend")
+
+            plt.xticks(rotation = 30)
             st.pyplot(fig)
 
     except Exception as e:
