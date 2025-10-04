@@ -1,24 +1,22 @@
-venv/
-.env/
-.venv/
-
+# Python
 __pycache__/
 *.py[cod]
 *.pyo
+*.pyd
 
-.ipynb_checkpoints/
+# Virtual environments
+venv/
+.env/
+env/
 
-data/
-*.csv
+# VS Code / Dev Containers
+.vscode/
+.devcontainer/
 
+# Data & model artifacts (if large)
+*.pkl
+*.h5
+
+# OS files
 .DS_Store
 Thumbs.db
-
-*.env
-.env.*
-
-
-*.log
-
-.vscode/
-.idea/
