@@ -2,8 +2,10 @@
 
 Predicts **tomorrow's stock movement (UP/DOWN)** using **XGBoost** and **live stock data**.  
 Includes a **Streamlit UI**, feature engineering, and a saved model (`stock_predictor.pkl`).
+[Click for app demo](https://stockpredictor-pirvb8p7vk7amqghzsatrs.streamlit.app/)
 
 ---
+
 
 ## Features
 - Live stock data via Yahoo Finance  
