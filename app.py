@@ -3,6 +3,9 @@ import pandas as pd
 import joblib
 import yfinance as yf
 import matplotlib.pyplot as plt
+import sys
+sys.path.append('src')  # Ensure src/ is discoverable
+
 from src.preprocessing import load_and_engineer_features
 
 model_path = "Stock_predictor.pkl"
